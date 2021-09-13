@@ -1,14 +1,10 @@
 html,
 body {
-    height: 100%;
+    background-color: #f5f5f5;
 }
 
-body {
-    display: flex;
-    align-items: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #f5f5f5;
+.main-container {
+    margin: 100px 0;
 }
 
 .form-search {
@@ -30,4 +26,20 @@ body {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
+}
+
+.links-list {
+    list-style: none;
+    padding: 5px 0;
+    max-width: 60%;
+}
+
+.links-item div {
+    font-size: .9rem;
+    color: #4f5050;
+}
+
+.links-item a {
+    text-decoration: none;
+    font-size: 1.4rem;
 }

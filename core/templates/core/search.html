@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Search Results: {{ query }}</title>
-</head>
-<body>
-    <h1>{{ query }}</h1>
-</body>
-</html>
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+    <aside class="searchbar">
+        <div class="container mt-5 mb-5">
+            <div class="d-flex flex-wrap flex-column flex-md-row align-items-center justify-content-center justify-content-md-start">
+                <img class="mb-2 mb-md-0 me-md-2" src="{% static 'images/logo.svg' %}" width="40">
+                <form class="flex-grow-1 mb-2 mb-md-0 me-md-2" method="post" action="{% url 'core:search' %}" class="mb-2 mb-md-0 me-md-2">
+                    {% csrf_token %}
+                    <input class="form-control w-100" type="search" placeholder="Search" class="" id="floatingInput" name="query">
+                </form>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </aside>
+    <hr>
+    <main class="results-container">
+        <div class="container">
+            <p class="text-secondary">Approximately 1000 results</p>
+            <ul class="links-list">
+                <li class="links-item">
+                    <div class="links-url">www.urltesting.com</div>
+                    <a href="#">Link that should interest us</a>
+                    <p class="text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam distinctio et exercitationem impedit in laudantium maiores modi non odio placeat qui repudiandae, ullam unde voluptas.</p>
+                </li>
+            </ul>
+        </div>
+    </main>
+{% endblock %}

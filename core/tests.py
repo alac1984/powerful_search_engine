@@ -11,3 +11,13 @@ class SearchViewTests(TestCase):
         response = self.client.post(reverse('core:search'), {'query': ''})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "You didn&#x27;t search for anything")
+
+    # If user type something and database didn't find results
+    # show a message informing that to the user
+
+    # If a user try to access search/ endpoint with a get request
+    # redirect it to index page
+
+    # If a user type something and database find results,
+    # show then to the user (inspect if it has options)
+
