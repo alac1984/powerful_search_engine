@@ -12,11 +12,17 @@ class SearchViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "You didn&#x27;t search for anything")
 
+    def test_method_get_redirect_to_index(self):
+        """
+        If the user tries to access search/ endpoint directly from the
+        browser (with a GET request) redirect it to index url
+        """
+        response = self.client.get(reverse('core:search'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Powerful Search Engine')
+
     # If user type something and database didn't find results
     # show a message informing that to the user
-
-    # If a user try to access search/ endpoint with a get request
-    # redirect it to index page
 
     # If a user type something and database find results,
     # show then to the user (inspect if it has options)

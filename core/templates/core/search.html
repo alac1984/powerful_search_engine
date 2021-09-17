@@ -3,27 +3,62 @@
 {% block content %}
     <aside class="searchbar">
         <div class="container mt-5 mb-5">
-            <div class="d-flex flex-wrap flex-column flex-md-row align-items-center justify-content-center justify-content-md-start">
-                <img class="mb-2 mb-md-0 me-md-2" src="{% static 'images/logo.svg' %}" width="40">
-                <form class="flex-grow-1 mb-2 mb-md-0 me-md-2" method="post" action="{% url 'core:search' %}" class="mb-2 mb-md-0 me-md-2">
-                    {% csrf_token %}
-                    <input class="form-control w-100" type="search" placeholder="Search" class="" id="floatingInput" name="query">
+            <div class="d-flex flex-wrap flex-column flex-md-row
+            align-items-center justify-content-center justify-content-md-start">
+                <div class="mb-2 mb-md-0 me-md-2" >
+                    <a href="{% url 'core:index' %}">
+                        <img src="{% static 'images/logo.svg' %}" width="40">
+                    </a>
+                </div>
+                <form class="flex-grow-1 mb-2 mb-md-0 me-md-2" method="get" action="{% url 'core:search' %}"
+                      class="mb-2 mb-md-0 me-md-2">
+                    <input class="form-control w-100" type="search" placeholder="Search"
+                           class="" id="floatingInput" name="q" value="{{ request.GET.q }}">
                 </form>
                 <button class="btn btn-primary" type="submit">Search</button>
             </div>
         </div>
     </aside>
     <hr>
-    <main class="results-container">
-        <div class="container">
-            <p class="text-secondary">Approximately 1000 results</p>
+    <main class="container">
+        {% if num_results > 0 %}
+            <p class="text-secondary">We have {{ num_results }} result{{ num_results | pluralize }} for you</p>
             <ul class="links-list">
-                <li class="links-item">
-                    <div class="links-url">www.urltesting.com</div>
-                    <a href="#">Link that should interest us</a>
-                    <p class="text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam distinctio et exercitationem impedit in laudantium maiores modi non odio placeat qui repudiandae, ullam unde voluptas.</p>
+                {% for post in posts %}
+                    <li class="links-item mb-4">
+                        <div class="links-url">{{ post.post_url }}</div>
+                        <a href="{% url 'core:detail' post.id %}">{{ post.post_title }}</a>
+                        <p class="text-secondary">{{ post.post_text | truncatewords:40 }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="text-center">
+                <img class="m-auto" src="{% static 'images/sad_robot.png' %}" alt="A sad robot">
+                <h3>We didn't find anything on our database. We're sorry.</h3>
+            </div>
+        {% endif %}
+        <nav aria-label="Search Pagination">
+            {% if posts.has_other_pages %}
+            <ul class="pagination justify-content-start">
+                {# Previous button #}
+                <li class="page-item{% if not posts.has_previous %} disabled{% endif %}">
+                    <a class="page-link" href="{% url 'core:search' %}?page={% if post.has_previous %}{{ posts.previous_page_number }}{% else %}1{% endif %}&q={{ request.GET.q }}" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                {# Page number buttons #}
+                {% for number in page_range %}
+                <li class="page-item{% if posts.number == forloop.counter %} active{% endif %}">
+                    <a class="page-link" href="{% url 'core:search' %}?page={{ forloop.counter }}&q={{ request.GET.q }}">
+                        {{ number }}
+                    </a>
+                </li>
+                {% endfor %}
+                {# Next button #}
+                <li class="page-item{% if not posts.has_next  %} disabled{% endif %}">
+                    <a class="page-link" href="{% url 'core:search' %}?page={% if posts.has_next %}{{ posts.next_page_number }}{% else %}{{ num_pages }}{% endif %}&q={{ request.GET.q }}">Next</a>
                 </li>
             </ul>
-        </div>
+            {% endif %}
+        </nav>
     </main>
 {% endblock %}

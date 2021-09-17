@@ -25,19 +25,17 @@
 {% block content %}
 <div class="main-container text-center">
 <main class="form-search">
-    <form method="post" action="{% url 'core:search' %}">
-        {% csrf_token %}
+    <form method="get" action="{% url 'core:search' %}?q={{ request.GET.q }}">
         <img class="mb-4" src="{% static 'images/logo.svg' %}" alt="Powerful search fake logo" width="72">
         <h1 class="h4 mb-3 fw-normal">Powerful Search Engine</h1>
 
         <div class="form-floating mb-3">
-            <input type="search" class="form-control" id="floatingInput" name="query">
+            <input type="search" class="form-control" id="floatingInput" name="q" value="{{ request.GET.q }}">
             <label for="floatingInput">Type your search</label>
         </div>
-
         <button class="w-100 btn btn-lg btn-primary" type="submit">Pesquisar</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2021–2021</p>
     </form>
+    <p class="mt-5 mb-3 text-muted">&copy; 2021–2021</p>
 </main>
 </div>
 {% endblock %}
