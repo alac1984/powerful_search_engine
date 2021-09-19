@@ -28,6 +28,7 @@
                     <li class="links-item mb-4">
                         <div class="links-url">{{ post.post_url }}</div>
                         <a href="{% url 'core:detail' post.id %}">{{ post.post_title }}</a>
+                        <p class="text-secondary">{{ post.post_subtitle | truncatewords:40 }}</p>
                         <p class="text-secondary">{{ post.post_text | truncatewords:40 }}</p>
                     </li>
                 {% endfor %}

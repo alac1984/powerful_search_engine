@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from . import models as m
 
@@ -14,9 +14,9 @@ def search_view(request):
     query = request.GET.get('q')
     page_num = request.GET.get('page')
 
-    paginator = Paginator(posts.annotate(
-        search=SearchVector('post_title', 'post_subtitle'),
-    ).filter(search=query).order_by('post_title'), 15)
+    paginator = Paginator(posts.filter(
+        vector_column=SearchQuery(query, config='english', search_type='websearch')), 15
+    )
 
     num_results = paginator.count
     num_pages = paginator.num_pages
