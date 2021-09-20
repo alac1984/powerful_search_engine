@@ -5,6 +5,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from . import models as m
 
 
+def return_numbers_for_paginator(num_pages, page):
+    """"
+    A function that gives the 5 numbers to be showed in search paginator
+    """
+    values = [n + 1 for n in range(num_pages)][:5]
+    return values if page in values else [n + page - 5 for n in values]
+
+
 def index_view(request):
     return render(request, 'core/index.html')
 
@@ -29,12 +37,19 @@ def search_view(request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
 
+    # Numbers for paginator
+    num_paginator = return_numbers_for_paginator(num_pages, int(page_num))
+
     context = {
         'posts': posts,
         'num_results': num_results,
         'num_pages': num_pages,
-        'page_range': paginator.page_range,
+        'num_paginator': num_paginator,
+        'first_num_paginator': num_paginator[0],
+        'last_num_paginator': num_paginator[-1]
     }
+
+    print('Stop')
 
     return render(request, 'core/search.html', context)
 
