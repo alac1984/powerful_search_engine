@@ -23,6 +23,9 @@ def search_view(request):
     query = request.GET.get('q')
     page_num = request.GET.get('page')
 
+    if query is None:
+        return HttpResponseRedirect(reverse('core:index'))
+
     search_query = SearchQuery(query, config='english')
 
     paginator = Paginator(
@@ -53,8 +56,6 @@ def search_view(request):
         'first_num_paginator': num_paginator[0],
         'last_num_paginator': num_paginator[-1]
     }
-
-    print('Stop')
 
     return render(request, 'core/search.html', context)
 
